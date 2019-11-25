@@ -16,6 +16,6 @@ class MyViewModel: ViewModel() {
 }
 ```
 
-It should still emit a value just once.  But only once observers start observing.
+The first observer will seee the pending value.  It should still emit a value just once.  All new observers will have to wait for new events to be set.
 
 I tried to PR it back to the original author but he didn't like my reasoning so I'm forking it.
