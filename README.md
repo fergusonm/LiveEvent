@@ -1,4 +1,4 @@
-This is my variation of `hadliq/LiveEvent`
+This is my variation of `hadliq/LiveEvent` described here https://proandroiddev.com/livedata-with-single-events-2395dea972a8
 
 The only difference is that my version has a pending flag such that if no observers have _ever_ observed a value the LiveEvent will hold it and emit it to the first observer.  Once observers start observing values then it emits a value.  New observers have to wait for the next value to be set.
 
