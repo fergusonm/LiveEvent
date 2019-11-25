@@ -1,36 +1,9 @@
-[![Build Status](https://travis-ci.org/hadilq/LiveEvent.svg?branch=master)](https://travis-ci.org/hadilq/LiveEvent)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq.liveevent/liveevent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq.liveevent/liveevent)
+This is my variation of `hadliq/LiveEvent`
 
-Live Event
----
-This library holds a class to handle single live events in Android MVVM architectural pattern. This class is extended
-form LiveData class, from `androidx.lifecycle:lifecycle-extensions` library, to propagate the data as an event,
-which means it emits data just once.
+The only difference is that my version has a pending flag such that if no observers have _ever_ observed a value the LiveEvent will hold it and emit it to the first observer.  Once observers start observing values then it emits a value.  New observers have to wait for the next value to be set.
 
-Usage
----
-This source has a sample app where you can find `LiveEventViewModel` in it, in which the `LiveEvent` class is used as
-follows.
-```kotlin
-class LiveEventViewModel : ViewModel() {
-    private val clickedState = LiveEvent<String>()
-    val state: LiveData<String> = clickedState
+The reason I did this was to work-around a race condition where it's possible to set an initial value in a LiveEvent before _any_ observers have started observing.  If that happened then in `hadliq`'s original implementation the event would be lost.  This introduced a lifecycle dependency to the LiveEvent I didn't like.
 
-    fun clicked() {
-        clickedState.value = ...
-    }
-}
-```
+It should still emit a value just once.  But only once observers start observing.
 
-Download
----
-Download via gradle
-```groovy
-implementation "com.github.hadilq.liveevent:liveevent:$libVersion"
-```
-where the `libVersion` is [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq.liveevent/liveevent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.hadilq.liveevent/liveevent).
-
-Contribution
----
-Just create your branch from the master branch, change it, write additional tests, satisfy all tests, create your pull
-request, thank you, you're awesome.
+I tried to PR it back to the original author but he didn't like my reasoning so I'm forking it.
