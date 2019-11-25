@@ -4,6 +4,18 @@ The only difference is that my version has a pending flag such that if no observ
 
 The reason I did this was to work-around a race condition where it's possible to set an initial value in a LiveEvent before _any_ observers have started observing.  If that happened then in `hadliq`'s original implementation the event would be lost.  This introduced a lifecycle dependency to the LiveEvent I didn't like.
 
+For example, if for whatever reason an event was emitting in an `init` block of a `ViewModel`.
+
+```
+class MyViewModel: ViewModel() {
+  val liveEvent = LiveEvent<String>()
+
+  init {
+      liveEvent.value = "I might get missed"
+  }
+}
+```
+
 It should still emit a value just once.  But only once observers start observing.
 
 I tried to PR it back to the original author but he didn't like my reasoning so I'm forking it.
